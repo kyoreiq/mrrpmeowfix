@@ -228,6 +228,14 @@ class Service:
         return self._with_steam_closed(
             lambda: apply.undo(self.root, self.account, appid, self.ledger), progress, restart)
 
+    def prefix_path(self, appid: int) -> Path | None:
+        return steam.prefix_path(self.root, appid) if self.root else None
+
+    def reset_prefix(self, appid: int) -> Path:
+        if not self.root or not self.account:
+            raise SteamMissing("Steam wasn't found")
+        return apply.reset_prefix(self.root, self.account, appid, self.ledger)
+
     def risky_games(self, views: list[GameView]) -> list[int]:
         return [v.appid for v in views if v.risky_applied]
 

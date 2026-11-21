@@ -206,7 +206,38 @@ class MainWindow(Adw.ApplicationWindow):
     # Game pages
 
     def _game_page(self, view: GameView) -> GamePage:
-        return GamePage(view, self.service.root, self.service.preview_launch(view), self.start_apply, self.start_undo)
+        prefix = self.service.prefix_path(view.appid) if view.installed else None
+        return GamePage(view, self.service.root, self.service.preview_launch(view), self.start_apply, self.start_undo,
+                        self.start_reset, prefix)
+
+    def start_reset(self, appid: int) -> None:
+        view = self.by_id.get(appid)
+        name = view.name if view else str(appid)
+        path = self.service.prefix_path(appid)
+        if path is None:
+            self.toast("This game has no Proton files yet.")
+            return
+        dialog = Adw.AlertDialog(
+            heading=f"Reset Proton files for {name}?",
+            body=f"This moves {path} to the trash. Steam makes a fresh one the next time you play.\n\n"
+                 "Windows components installed by risky fixes go with it. So do saves the game keeps in that "
+                 "folder, unless it uses Steam Cloud. If something's missing afterwards, restore the folder "
+                 "from the trash.")
+        dialog.add_response("cancel", "Cancel")
+        dialog.add_response("reset", "Move to trash")
+        dialog.set_response_appearance("reset", Adw.ResponseAppearance.DESTRUCTIVE)
+        dialog.set_close_response("cancel")
+
+        def done(_path) -> None:
+            self.refresh()
+            self.toast(f"Proton files for {name} are in the trash. Steam makes new ones next time you play.")
+
+        def failed(e) -> None:
+            show_error(self, "Proton files weren't reset", str(e))
+
+        dialog.connect("response", lambda _d, rid: rid == "reset" and run_async(
+            lambda: self.service.reset_prefix(appid), done, failed))
+        dialog.present(self)
 
     def open_game(self, view: GameView) -> None:
         self.lib_nav.push(self._game_page(view))

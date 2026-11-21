@@ -34,7 +34,8 @@ def _cmdbox(title: str, text: str) -> Gtk.Box:
 
 class GamePage(Adw.NavigationPage):
     def __init__(self, view: GameView, root, after_launch: str,
-                 on_apply: Callable[[list[int]], None], on_undo: Callable[[int], None]):
+                 on_apply: Callable[[list[int]], None], on_undo: Callable[[int], None],
+                 on_reset: Callable[[int], None] | None = None, prefix=None):
         super().__init__(title=view.name, tag=f"game-{view.appid}")
         self.view = view
         toolbar = Adw.ToolbarView()
@@ -94,6 +95,14 @@ class GamePage(Adw.NavigationPage):
             apply_btn.set_sensitive(view.pending > 0)
             apply_btn.connect("clicked", lambda *_: on_apply([view.appid]))
             actions.append(apply_btn)
+            play = Gtk.Button(tooltip_text="Start the game through Steam")
+            play_box = hbox(6)
+            play_box.append(Gtk.Image(icon_name="media-playback-start-symbolic"))
+            play_box.append(label("Play"))
+            play.set_child(play_box)
+            play.add_css_class("quiet")
+            play.connect("clicked", lambda *_: open_uri(self, f"steam://rungameid/{view.appid}"))
+            actions.append(play)
             if view.entry:
                 undo = Gtk.Button(label="Undo fixes")
                 undo.add_css_class("quiet")
@@ -145,6 +154,20 @@ class GamePage(Adw.NavigationPage):
             body.append(_cmdbox("Now", view.launch_now))
             if after_launch != view.launch_now:
                 body.append(_cmdbox("After applying", after_launch))
+
+        if view.installed and not view.native and prefix is not None and on_reset:
+            body.append(label("Proton files", "section-title"))
+            body.append(label(
+                "Windows games keep their own little Windows install in a folder Steam made for them. Resetting "
+                "moves that folder to the trash and Steam builds a fresh one next time you play. It's the way to "
+                "get rid of Windows components a risky fix installed, or to fix a game that broke after a change.",
+                "muted", wrap=True))
+            reset_row = hbox(10)
+            reset = Gtk.Button(label="Reset Proton files")
+            reset.add_css_class("quiet")
+            reset.connect("clicked", lambda *_: on_reset(view.appid))
+            reset_row.append(reset)
+            body.append(reset_row)
 
         last = view.entry.get("last_result") if view.entry else None
         if last:

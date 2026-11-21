@@ -125,6 +125,28 @@ class ApplyTests(unittest.TestCase):
         self.assertEqual(self.ledger.get(self.account, 107410), {})
         self.assertFalse(self.backups.exists())
 
+    def test_reset_prefix_trashes_and_forgets_verbs(self):
+        self.run_apply({107410: self.plan(risky_on=True)})
+        self.assertEqual(self.ledger.get(self.account, 107410)["verbs"], ["vcrun2019"])
+        trashed = []
+        path = apply.reset_prefix(self.root, self.account, 107410, self.ledger, trash=trashed.append,
+                                  running=lambda appid: False)
+        self.assertEqual(trashed, [path])
+        self.assertEqual(path.name, "107410")
+        entry = self.ledger.get(self.account, 107410)
+        self.assertEqual(entry["verbs"], [])
+        self.assertNotIn("vcrun2019", entry["risky"])
+
+    def test_reset_prefix_refuses_while_game_runs(self):
+        with self.assertRaises(apply.GameRunning):
+            apply.reset_prefix(self.root, self.account, 107410, self.ledger, trash=lambda p: self.fail("trashed"),
+                               running=lambda appid: True)
+
+    def test_reset_prefix_without_folder(self):
+        with self.assertRaises(FileNotFoundError):
+            apply.reset_prefix(self.root, self.account, 602960, self.ledger, trash=lambda p: None,
+                               running=lambda appid: False)
+
     def test_backups_pruned(self):
         for _ in range(12):
             self.run_apply({107410: self.plan()})

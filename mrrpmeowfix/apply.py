@@ -25,6 +25,10 @@ class SteamRunning(RuntimeError):
     pass
 
 
+class GameRunning(RuntimeError):
+    pass
+
+
 @dataclass
 class GameResult:
     appid: int
@@ -345,3 +349,37 @@ def undo(
     ledger.drop(account, appid)
     ledger.save()
     return res
+
+
+def move_to_trash(path: Path) -> None:
+    from gi.repository import Gio, GLib
+
+    try:
+        Gio.File.new_for_path(str(path)).trash(None)
+    except GLib.Error as e:
+        raise OSError(f"Couldn't move it to the trash ({e.message}), so nothing was deleted.") from e
+
+
+def reset_prefix(
+    root: steam.SteamRoot,
+    account: steam.Account,
+    appid: int,
+    ledger: Ledger,
+    trash: Callable[[Path], None] = move_to_trash,
+    running: Callable[[int], bool] = steam.game_running,
+) -> Path:
+    """Move a game's Proton folder to the trash. Steam builds a fresh one on the next launch."""
+    path = steam.prefix_path(root, appid)
+    if path is None:
+        raise FileNotFoundError("This game has no Proton files yet.")
+    if running(appid):
+        raise GameRunning("The game is running. Close it first.")
+    trash(path)
+    entry = ledger.get(account, appid)
+    if entry and entry.get("verbs"):
+        gone = set(entry["verbs"])
+        entry["verbs"] = []
+        entry["risky"] = [r for r in entry.get("risky", []) if r not in gone]
+        ledger.put(account, appid, entry)
+        ledger.save()
+    return path

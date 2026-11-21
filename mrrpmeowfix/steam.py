@@ -248,6 +248,28 @@ def cover_path(root: SteamRoot, appid: int) -> Path | None:
     return art_path(root, appid, "library_600x900")
 
 
+def prefix_path(root: SteamRoot, appid: int) -> Path | None:
+    for lib in libraries(root):
+        path = lib / "steamapps/compatdata" / str(appid)
+        if path.is_dir():
+            return path
+    return None
+
+
+def game_running(appid: int, proc: Path = Path("/proc")) -> bool:
+    wanted = {f"SteamAppId={appid}".encode(), f"STEAM_COMPAT_APP_ID={appid}".encode()}
+    for entry in proc.iterdir():
+        if not entry.name.isdigit():
+            continue
+        try:
+            env = (entry / "environ").read_bytes()
+        except OSError:
+            continue
+        if wanted & set(env.split(b"\0")):
+            return True
+    return False
+
+
 def _steam_command(root: SteamRoot) -> list[str]:
     if root.kind == "flatpak":
         return ["flatpak", "run", FLATPAK_ID]

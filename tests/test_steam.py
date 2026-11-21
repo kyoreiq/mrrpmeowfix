@@ -60,6 +60,23 @@ class SteamTests(unittest.TestCase):
         self.assertTrue(steam.cover_path(self.root, 438100).name.endswith("600x900.jpg"))
         self.assertIsNone(steam.cover_path(self.root, 107410))
 
+    def test_game_running(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            proc = Path(tmp)
+            (proc / "123").mkdir()
+            (proc / "123/environ").write_bytes(b"HOME=/x\0SteamAppId=438100\0")
+            (proc / "456").mkdir()
+            (proc / "456/environ").write_bytes(b"STEAM_COMPAT_APP_ID=107410\0")
+            (proc / "self").mkdir()
+            self.assertTrue(steam.game_running(438100, proc))
+            self.assertTrue(steam.game_running(107410, proc))
+            self.assertFalse(steam.game_running(4381, proc))
+
+    def test_prefix_path(self):
+        self.assertEqual(steam.prefix_path(self.root, 107410), self.root_path / "steamapps/compatdata/107410")
+        self.assertIsNone(steam.prefix_path(self.root, 602960))
+
     def test_compat_mapping(self):
         self.assertEqual(steam.compat_mapping(self.root).get("438100"), "proton-cachyos-slr")
 

@@ -1,0 +1,349 @@
+{
+ "wrappers": {
+  "gamemoderun": {
+   "level": "normal",
+   "label": "GameMode",
+   "about": "Puts your CPU (and on some setups the GPU) into performance mode while the game is running.",
+   "ac_safe": true
+  },
+  "game-performance": {
+   "level": "normal",
+   "label": "Performance power profile",
+   "about": "Switches the system power profile to performance while the game runs, then back afterwards.",
+   "ac_safe": true
+  },
+  "mangohud": {
+   "level": "never",
+   "label": "MangoHud overlay",
+   "about": "Shows FPS, frame times and temperatures on top of the game."
+  },
+  "prime-run": {
+   "level": "hybrid",
+   "label": "Use the NVIDIA GPU",
+   "about": "On laptops with two GPUs, runs the game on the faster NVIDIA card."
+  }
+ },
+ "env": {
+  "PROTON_ENABLE_NVAPI": {
+   "level": "normal",
+   "gpu": "nvidia",
+   "label": "NVIDIA features (DLSS, Reflex)",
+   "about": "Lets the game talk to your NVIDIA driver, so DLSS and Reflex can be turned on in the game's settings."
+  },
+  "DXVK_ENABLE_NVAPI": {
+   "level": "normal",
+   "gpu": "nvidia",
+   "label": "NVIDIA features for DXVK",
+   "about": "Older way of exposing NVIDIA features to DirectX 11 games."
+  },
+  "PROTON_ENABLE_NGX_UPDATER": {
+   "level": "normal",
+   "gpu": "nvidia",
+   "label": "Keep DLSS up to date",
+   "about": "Lets the NVIDIA driver update the game's DLSS files to newer versions."
+  },
+  "PROTON_HIDE_NVIDIA_GPU": {
+   "level": "risky",
+   "gpu": "nvidia",
+   "label": "Hide the NVIDIA GPU",
+   "about": "Makes the game think you have an AMD card. Fixes a few games that break on NVIDIA, but turns off DLSS."
+  },
+  "PROTON_FORCE_LARGE_ADDRESS_AWARE": {
+   "level": "normal",
+   "label": "More memory for 32-bit games",
+   "about": "Lets older 32-bit games use more than 2 GB of RAM, which fixes out-of-memory crashes."
+  },
+  "PROTON_SET_GAME_DRIVE": {
+   "level": "normal",
+   "label": "Game folder as a drive",
+   "about": "Gives the game folder a Windows drive letter. Some launchers and mod tools need this."
+  },
+  "PROTON_PREFER_SDL": {
+   "level": "normal",
+   "label": "SDL controller input",
+   "about": "Uses SDL for controllers, which fixes double input or controllers not being detected in some games."
+  },
+  "PROTON_USE_XALIA": {
+   "level": "normal",
+   "label": "Controller UI helper",
+   "about": "Turns Proton's controller navigation helper on or off. Reports show what works for this game."
+  },
+  "PULSE_LATENCY_MSEC": {
+   "level": "normal",
+   "label": "Audio buffer",
+   "about": "Raises the audio buffer, which fixes crackling or stuttering sound."
+  },
+  "PROTON_HEAP_DELAY_FREE": {
+   "level": "risky",
+   "label": "Delayed memory release",
+   "about": "Works around crashes in a few games with memory bugs. Can raise memory use."
+  },
+  "PROTON_USE_WINED3D": {
+   "level": "risky",
+   "label": "OpenGL renderer (WineD3D)",
+   "about": "Uses the older OpenGL path instead of Vulkan. Fixes some crashes and black screens, but usually lowers FPS a lot."
+  },
+  "PROTON_USE_WINED3D11": {
+   "level": "risky",
+   "label": "OpenGL renderer for DirectX 11",
+   "about": "Same as the WineD3D option, only for DirectX 11. Usually lowers FPS."
+  },
+  "PROTON_ENABLE_WAYLAND": {
+   "level": "risky",
+   "label": "Native Wayland window",
+   "about": "Runs the game as a native Wayland window. Can feel smoother, but some games crash, lose input or open on the wrong screen."
+  },
+  "PROTON_NO_ESYNC": {
+   "level": "risky",
+   "label": "Turn off esync",
+   "about": "Disables a speed-up that a few games don't like. Usually costs some FPS."
+  },
+  "PROTON_NO_FSYNC": {
+   "level": "risky",
+   "label": "Turn off fsync",
+   "about": "Disables a speed-up that a few games don't like. Usually costs some FPS."
+  },
+  "PROTON_NO_NTSYNC": {
+   "level": "risky",
+   "label": "Turn off ntsync",
+   "about": "Disables the kernel sync speed-up. Only helps a handful of games."
+  },
+  "PROTON_NO_D3D11": {
+   "level": "risky",
+   "label": "Hide DirectX 11",
+   "about": "Forces the game onto an older DirectX version. Fixes a few games, lowers FPS in most."
+  },
+  "PROTON_NO_D3D10": {
+   "level": "risky",
+   "label": "Hide DirectX 10",
+   "about": "Forces the game onto an older DirectX version."
+  },
+  "PROTON_VKD3D_HEAP": {
+   "level": "risky",
+   "label": "VKD3D heap option",
+   "about": "Experimental DirectX 12 memory option. Can fix crashes or cause new ones."
+  },
+  "VKD3D_CONFIG": {
+   "level": "risky",
+   "label": "VKD3D experimental options",
+   "about": "Turns on experimental DirectX 12 features. Results vary from game to game."
+  },
+  "VKD3D_FEATURE_LEVEL": {
+   "level": "risky",
+   "label": "DirectX 12 feature level",
+   "about": "Changes which DirectX 12 features the game sees."
+  },
+  "WINEDLLOVERRIDES": {
+   "level": "risky",
+   "label": "DLL overrides",
+   "about": "Changes which Windows DLLs the game loads. Needed for some mods, can stop the game from starting."
+  },
+  "PROTON_ENABLE_HDR": {
+   "level": "risky",
+   "label": "HDR output",
+   "about": "Turns on HDR. Needs an HDR screen and compositor support."
+  },
+  "DXVK_HDR": {
+   "level": "risky",
+   "label": "HDR for DXVK",
+   "about": "Turns on HDR for DirectX games. Needs an HDR screen and compositor support."
+  },
+  "SDL_VIDEODRIVER": {
+   "level": "risky",
+   "label": "SDL video driver",
+   "about": "Changes how the game opens its window."
+  },
+  "RADV_PERFTEST": {
+   "level": "risky",
+   "gpu": "amd",
+   "label": "AMD driver test features",
+   "about": "Turns on experimental features in the AMD Vulkan driver."
+  },
+  "PROTON_LOG": {
+   "level": "never"
+  },
+  "PROTON_LOG_DIR": {
+   "level": "never"
+  },
+  "WINEDEBUG": {
+   "level": "never"
+  },
+  "DXVK_HUD": {
+   "level": "never"
+  },
+  "DXVK_LOG_LEVEL": {
+   "level": "never"
+  },
+  "VKD3D_DEBUG": {
+   "level": "never"
+  },
+  "DXVK_ASYNC": {
+   "level": "never"
+  },
+  "DXVK_FRAME_RATE": {
+   "level": "never"
+  },
+  "SteamDeck": {
+   "level": "never"
+  },
+  "MANGOHUD": {
+   "level": "never"
+  },
+  "MANGOHUD_CONFIG": {
+   "level": "never"
+  },
+  "ENABLE_VKBASALT": {
+   "level": "never"
+  },
+  "PROTON_DUMP_DEBUG_COMMANDS": {
+   "level": "never"
+  },
+  "DISPLAY": {
+   "level": "never"
+  },
+  "LD_PRELOAD": {
+   "level": "never"
+  },
+  "__GL_SHADER_DISK_CACHE_SKIP_CLEANUP": {
+   "level": "normal",
+   "gpu": "nvidia",
+   "ac_safe": true,
+   "label": "Keep NVIDIA shader cache",
+   "about": "Stops the NVIDIA driver from throwing away compiled shaders, so games stutter less after the first run."
+  },
+  "__GL_SHADER_DISK_CACHE_SIZE": {
+   "level": "normal",
+   "gpu": "nvidia",
+   "ac_safe": true,
+   "label": "Bigger NVIDIA shader cache",
+   "about": "Gives the NVIDIA driver more room for compiled shaders, which cuts stutter in big games."
+  },
+  "MESA_SHADER_CACHE_MAX_SIZE": {
+   "level": "normal",
+   "ac_safe": true,
+   "label": "Bigger shader cache",
+   "about": "Gives the graphics driver more room for compiled shaders, which cuts stutter in big games."
+  }
+ },
+ "args": {
+  "-dx11": {
+   "level": "normal",
+   "label": "Start in DirectX 11",
+   "about": "Starts the game with DirectX 11, which often runs better under Proton."
+  },
+  "-dx12": {
+   "level": "normal",
+   "label": "Start in DirectX 12",
+   "about": "Starts the game with DirectX 12."
+  },
+  "-vulkan": {
+   "level": "normal",
+   "label": "Start in Vulkan",
+   "about": "Uses the game's own Vulkan renderer, which usually runs best on Linux."
+  },
+  "-force-vulkan": {
+   "level": "normal",
+   "label": "Start in Vulkan",
+   "about": "Uses the game's own Vulkan renderer."
+  },
+  "-force-d3d11": {
+   "level": "normal",
+   "label": "Start in DirectX 11",
+   "about": "Starts the game with DirectX 11."
+  },
+  "-skip-launcher": {
+   "level": "normal",
+   "label": "Skip the launcher",
+   "about": "Goes straight into the game instead of the publisher's launcher, which often breaks under Proton."
+  },
+  "--skip-launcher": {
+   "level": "normal",
+   "label": "Skip the launcher",
+   "about": "Goes straight into the game instead of the publisher's launcher."
+  },
+  "--launcher-skip": {
+   "level": "normal",
+   "label": "Skip the launcher",
+   "about": "Goes straight into the game instead of the publisher's launcher."
+  },
+  "-nolauncher": {
+   "level": "normal",
+   "label": "Skip the launcher",
+   "about": "Goes straight into the game instead of the launcher."
+  },
+  "-nosplash": {
+   "level": "normal",
+   "label": "Skip splash screens",
+   "about": "Skips logos at startup."
+  },
+  "-skipintro": {
+   "level": "normal",
+   "label": "Skip intro",
+   "about": "Skips the intro videos."
+  },
+  "-novid": {
+   "level": "normal",
+   "label": "Skip intro video",
+   "about": "Skips the intro video."
+  },
+  "-windowed": {
+   "level": "never"
+  },
+  "-fullscreen": {
+   "level": "never"
+  },
+  "-popupwindow": {
+   "level": "never"
+  },
+  "-noborder": {
+   "level": "never"
+  },
+  "-w": {
+   "level": "never"
+  },
+  "-h": {
+   "level": "never"
+  },
+  "-width": {
+   "level": "never"
+  },
+  "-height": {
+   "level": "never"
+  },
+  "-screen-width": {
+   "level": "never"
+  },
+  "-screen-height": {
+   "level": "never"
+  },
+  "-screen-fullscreen": {
+   "level": "never"
+  },
+  "-console": {
+   "level": "never"
+  },
+  "-high": {
+   "level": "never"
+  },
+  "-threads": {
+   "level": "never"
+  },
+  "+fps_max": {
+   "level": "never"
+  },
+  "+exec": {
+   "level": "never"
+  },
+  "-refresh": {
+   "level": "never"
+  },
+  "-freq": {
+   "level": "never"
+  },
+  "-nojoy": {
+   "level": "risky",
+   "label": "Turn off joystick support",
+   "about": "Stops the game from looking for controllers. Fixes some stutter, but controllers won't work."
+  }
+ }
+}

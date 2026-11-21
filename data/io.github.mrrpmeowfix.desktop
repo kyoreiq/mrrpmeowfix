@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=mrrpmeowfix
+GenericName=Game fixes for Steam
+Comment=Applies ProtonDB fixes and FPS tweaks to your Steam games
+Exec=@EXEC@
+Icon=io.github.mrrpmeowfix
+Terminal=false
+Categories=Game;
+Keywords=steam;proton;protondb;fps;games;fix;
+StartupWMClass=io.github.mrrpmeowfix
